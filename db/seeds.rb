@@ -122,9 +122,9 @@ end
 Product.destroy_all
 100.times do
   u = User.order('RANDOM()').limit(1).first
-  p = Product.create(name: Faker::Commerce.product_name, description: Faker::Lorem.paragraphs.join("\n"), state: ["Nuevo", "Usado", "Como Nuevo"], quantity: Random.new.rand(1..2), location: Faker::Address.city + ", " + Faker::Address.state, latitude: u.latitude, longitude: u.longitude, category_product_id: CategoryProduct.order('RANDOM()').limit(1).first.id, user_id: u.id)
+  p = Product.create(name: Faker::Commerce.product_name, description: Faker::Lorem.paragraphs.join("\n"), state: ["Nuevo", "Usado", "Como Nuevo"].sample, quantity: Random.new.rand(1..2), location: Faker::Address.city + ", " + Faker::Address.state, latitude: u.latitude, longitude: u.longitude, category_product_id: CategoryProduct.order('RANDOM()').limit(1).first.id, user_id: u.id)
   for i in 0..5 do
-    ProductPicture.create(picture: "https://picsum.photos/300/300/?random",number: i ,product_id: p.id)
+    ProductPicture.create(picture: "https://picsum.photos/1000/1000/?random",number: i ,product_id: p.id)
   end
 end
 
@@ -133,6 +133,45 @@ Service.destroy_all
   u = User.order('RANDOM()').limit(1).first
   s = Service.create(name: Faker::Commerce.product_name+" Service", description: Faker::Lorem.paragraphs.join("\n"), location: Faker::Address.city + ", " + Faker::Address.state, latitude: u.latitude, longitude: u.longitude, category_service_id: CategoryService.order('RANDOM()').limit(1).first.id, user_id: u.id)
   for i in 0..5 do
-    ServicePicture.create(picture: "https://picsum.photos/300/300/?random",number: i ,service_id: s.id)
+    ServicePicture.create(picture: "https://picsum.photos/1000/1000/?random",number: i ,service_id: s.id)
   end
+end
+
+Post.destroy_all
+PostItem.destroy_all
+PostCategory.destroy_all
+Comment.destroy_all
+CommentItem.destroy_all
+User.all.each do |user|
+  p = Post.create(name: Faker::Lorem.sentence(3, true, 10), description: Faker::Lorem.paragraphs.join("\n"), location: Faker::Address.city + ", " + Faker::Address.state, user_id: user.id, longitude: user.longitude ,latitude: user.latitude)
+  if Product.where(user_id: user.id).size > 0
+    PostItem.create(wants: false, post_id: p.id, product_id: Product.where(user_id: user.id).first.id)
+  end
+  if Product.where(user_id: user.id).size > 1
+    PostItem.create(wants: false, post_id: p.id, product_id: Product.where(user_id: user.id).second.id)
+  end
+  if Service.where(user_id: user.id).size > 0
+    PostItem.create(wants: false, post_id: p.id, service_id: Service.where(user_id: user.id).first.id)
+  end
+  if Service.where(user_id: user.id).size > 1
+    PostItem.create(wants: false, post_id: p.id, service_id: Service.where(user_id: user.id).second.id)
+  end
+  PostItem.create(wants: true, post_id: p.id, name: Faker::Commerce.product_name)
+  if [true, false].sample
+    PostItem.create(wants: true, post_id: p.id, name: Faker::Commerce.product_name)
+  end
+  if [true, false].sample
+    PostCategory.create(wants: true, post_id: p.id, category_product_id: CategoryProduct.order('RANDOM()').limit(1).first)
+  elsif [true, false].sample
+    PostCategory.create(wants: true, post_id: p.id, category_service_id: CategoryService.order('RANDOM()').limit(1).first)
+  end
+  c = Comment.create(content: Faker::Lorem.sentence, user_id: User.where.not(id: user.id).order('RANDOM()').first.id, post_id: p.id)
+  CommentItem.create(wants: false, name: Faker::Commerce.product_name, picture: "https://picsum.photos/300/300/?random", comment_id: c.id)
+  CommentItem.create(wants: true, name: Faker::Commerce.product_name, picture: "https://picsum.photos/300/300/?random", comment_id: c.id)
+  c2 = Comment.create(content: Faker::Lorem.sentence, user_id: user.id, post_id: p.id, comment_id: c.id)
+  CommentItem.create(wants: true, name: Faker::Commerce.product_name, picture: "https://picsum.photos/300/300/?random", comment_id: c2.id)
+  CommentItem.create(wants: false, name: Faker::Commerce.product_name, picture: "https://picsum.photos/300/300/?random", comment_id: c2.id)
+  c3 = Comment.create(content: Faker::Lorem.sentence, user_id: User.where.not(id: user.id).order('RANDOM()').first.id, post_id: p.id)
+  CommentItem.create(wants: false, name: Faker::Commerce.product_name, picture: "https://picsum.photos/300/300/?random", comment_id: c3.id)
+  CommentItem.create(wants: true, name: Faker::Commerce.product_name, picture: "https://picsum.photos/300/300/?random", comment_id: c3.id)
 end

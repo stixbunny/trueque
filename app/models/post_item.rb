@@ -1,6 +1,5 @@
 class PostItem < ApplicationRecord
-  belongs_to :user
   belongs_to :post
-  belongs_to :product
-  belongs_to :service
+  belongs_to :product, optional: true
+  belongs_to :service, optional: true
 end
