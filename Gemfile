@@ -11,6 +11,7 @@ gem 'activeadmin'
 gem 'carrierwave'
 gem 'kaminari'
 gem 'geocoder'
+gem 'bootswatch-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.5'
