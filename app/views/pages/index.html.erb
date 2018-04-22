@@ -1,2 +1,56 @@
-<h1>Pages#index</h1>
-<p>Find me in app/views/pages/index.html.erb</p>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="jumbotron">
+      <h1>¡Te lo cambio!</h1>
+      <p>Bienvenido a TeLoCambio.cl, tu punto de búsqueda para aquellas cosas sin hogar que tengas por ahi y para encontrar aquello que siempre quisiste.</p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-header">
+        Aqui algunas de las cosas que nuestros miembros quieren intercambiar...
+      </div>
+      <div class="body">
+        <% @posts.each do |post| %>
+        <div class="row" style="color: black;">
+          <div class="col-md-12">
+            <div class="card bg-light mb-3">
+              <div class="card-header">
+                <%= post.name %>
+              </div>
+              <div class="body">
+                <p class="card-text"><%= post.description %></p>
+                <p class="card-text"><%= post.location %></p>
+                <div class="row">
+                  <% post.items.post_items.where(wants: false).each do |item| %>
+                    <div class="col-md-3">
+                      <div class="card border-primary mb-3">
+                        <div class="card-header">
+                          <% if item.service != nil %>
+                            <%= item.service.name %>
+                          <% elif item.product != nil %>
+                            <%= item.product.name %>
+                          <% end %>
+                        </div>
+                        <div class="body">
+                          <% if item.service != nil %>
+                            <%= item.service.name %>
+                          <% elif item.product != nil %>
+                            <%= item.product.name %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
