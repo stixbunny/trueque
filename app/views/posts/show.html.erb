@@ -181,9 +181,9 @@
       <%= f.text_field :content, class: "form-control", placeholder: "Ingrese su comentario" %>
     </div>
     <div class="form-group">
-      <%= f.label :tengo %>
-      <%= f.fields_for :comment_items do |ci_form| %>
-        <%= ci_form.collection_select :product_id, current_user.products, :id, :name %>
+      <%= f.label "Tengo:" %><br>
+      <%= fields_for :comment_items do |cif| %>
+        <%= cif.collection_select(:product_id, current_user.products, :id, :name, :include_blank => "Nada seleccionado")%>
       <% end %>
     </div>
     <%= f.submit "Enviar comentario", class: "btn btn-primary" %>
