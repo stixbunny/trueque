@@ -170,57 +170,75 @@
 </p>
 
 <%= link_to 'Edit', edit_post_path(@post) %>
+<hr>
 
-<h3>Ingresar un nuevo comentario</h3>
+<% if user_signed_in? %>
+  <h3>Ingresar un nuevo comentario:</h3>
 
-<%= form_with model: [@post, Comment.new] do |f| %>
-  <div class="form-group">
-    <%= f.text_field :content, class: "form-control", placeholder: "Ingrese su comentario" %>
-  </div>
-  <%= f.submit "Enviar comentario", class: "btn btn-primary" %>
+  <%= form_with model: [@post, Comment.new] do |f| %>
+    <div class="form-group">
+      <%= f.label :comentario %>
+      <%= f.text_field :content, class: "form-control", placeholder: "Ingrese su comentario" %>
+    </div>
+    <div class="form-group">
+      <%= f.label :tengo %>
+      <%= f.fields_for :comment_items do |ci_form| %>
+        <%= ci_form.collection_select :product_id, current_user.products, :id, :name %>
+      <% end %>
+    </div>
+    <%= f.submit "Enviar comentario", class: "btn btn-primary" %>
+  <% end %>
+  <hr>
 <% end %>
-
 <h3>Comentarios:</h3>
 
 <% @comments.each do |comment| %>
-
+  <div class="row align-items-center h-100" id="comment<%= comment.id %>">
+    <div class="col-md-12">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-header"><%= link_to comment.user.name, user_path(comment.user), style: "color: white;" %></div>
+        <div class="card-body">
+          <p><%= comment.content %></p>
+          <br>
+          <% i = 0 %>
+          <div class="row" style="color: black;">
+            <% comment.comment_items.where(wants: false).each do |item| %>
+              <% i = i + 1 %>
+              <% if i > 1 %>
+                <span class="badge badge-primary">+</span>
+              <% end %>
+              <div class="col-sm-3 card-text">
+                <div class="card border-primary mb-3" style="max-width: 15rem;">
+                  <div class="card-header">
+                    <%= item.name %>
+                  </div>
+                  <div class="body text-center">
+                    <%= image_tag item.picture, width: '90%', style: "display: inline-block;" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+            <span class="badge badge-primary">por</span>
+            <% i = 0 %>
+            <% comment.comment_items.where(wants: true).each do |item| %>
+              <% i = i + 1 %>
+              <% if i > 1 %>
+                <span class="badge badge-primary">+</span>
+              <% end %>
+              <div class="col-sm-3">
+                <div class="card border-primary mb-3" style="max-width: 15rem;">
+                  <div class="card-header">
+                    <%= item.name %>
+                  </div>
+                  <div class="body text-center">
+                    <%= image_tag item.picture, width: '90%', style: "display: inline-block;" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
-
-<div class="row align-items-center text-center h-100" id="comment<%= comment.id %>">
-  <p><%= comment.content %></p>
-  <% i = 0 %>
-  <% comment.comment_items.where(wants: false).each do |item| %>
-    <% i = i + 1 %>
-    <% if i > 1 %>
-      <span class="badge badge-primary">+</span>
-    <% end %>
-    <div class="col-sm-3">
-      <div class="card border-primary mb-3" style="max-width: 15rem;">
-        <div class="card-header">
-          <%= item.name %>
-        </div>
-        <div class="body text-center">
-          <%= image_tag item.picture, width: '90%', style: "display: inline-block;" %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-  <span class="badge badge-primary">por</span>
-  <% i = 0 %>
-  <% comment.comment_items.where(wants: true).each do |item| %>
-    <% i = i + 1 %>
-    <% if i > 1 %>
-      <span class="badge badge-primary">+</span>
-    <% end %>
-    <div class="col-sm-3">
-      <div class="card border-primary mb-3" style="max-width: 15rem;">
-        <div class="card-header">
-          <%= item.name %>
-        </div>
-        <div class="body text-center">
-          <%= image_tag item.picture, width: '90%', style: "display: inline-block;" %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-</div>
