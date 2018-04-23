@@ -2,8 +2,10 @@ Rails.application.routes.draw do
   get 'pages/index'
 
   resources :posts
-  resources :products
-  resources :services
+  resources :users, only: [:show, :edit] do
+    resources :products
+    resources :services
+  end
   devise_for :users
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

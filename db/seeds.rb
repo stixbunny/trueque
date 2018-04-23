@@ -145,16 +145,16 @@ CommentItem.destroy_all
 User.all.each do |user|
   p = Post.create(name: Faker::Lorem.sentence(3, true, 10), description: Faker::Lorem.paragraphs.join("\n"), location: Faker::Address.city + ", " + Faker::Address.state, user_id: user.id, longitude: user.longitude ,latitude: user.latitude)
   if Product.where(user_id: user.id).size > 0
-    PostItem.create(wants: false, post_id: p.id, product_id: Product.where(user_id: user.id).first.id)
+    PostItem.create(wants: false, post_id: p.id, name: Faker::Commerce.product_name, product_id: Product.where(user_id: user.id).first.id)
   end
   if Product.where(user_id: user.id).size > 1
-    PostItem.create(wants: false, post_id: p.id, product_id: Product.where(user_id: user.id).second.id)
+    PostItem.create(wants: false, post_id: p.id, name: Faker::Commerce.product_name, product_id: Product.where(user_id: user.id).second.id)
   end
   if Service.where(user_id: user.id).size > 0
-    PostItem.create(wants: false, post_id: p.id, service_id: Service.where(user_id: user.id).first.id)
+    PostItem.create(wants: false, post_id: p.id, name: Faker::Commerce.product_name, service_id: Service.where(user_id: user.id).first.id)
   end
   if Service.where(user_id: user.id).size > 1
-    PostItem.create(wants: false, post_id: p.id, service_id: Service.where(user_id: user.id).second.id)
+    PostItem.create(wants: false, post_id: p.id, name: Faker::Commerce.product_name, service_id: Service.where(user_id: user.id).second.id)
   end
   PostItem.create(wants: true, post_id: p.id, name: Faker::Commerce.product_name)
   if [true, false].sample

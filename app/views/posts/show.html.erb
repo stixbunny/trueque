@@ -1,24 +1,226 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @post.name %>
-</p>
+<h3>
+  <strong><%= @post.name %></strong>
+</h3>
+
+<div class="row" style="color: black;">
+  <div class="col-md-12">
+    <div class="card bg-light mb-3">
+      <div class="card-header">
+        Tengo:
+      </div>
+      <div class="body">
+        <% @post.post_items.where(wants: false).each do |item| %>
+          <% if item.product != nil %>
+            <div class="row">
+              <div class="col-md-6">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                  </ol>
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <%= image_tag item.product.product_pictures.order(:number).first.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.product.product_pictures.order(:number).second.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.product.product_pictures.order(:number).third.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.product.product_pictures.order(:number).fourth.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.product.product_pictures.order(:number).fifth.picture, class: "d-block w-100" %>
+                    </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Siguiente</span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h3><%= item.name %></h3>
+                <p><%= item.product.description %></p>
+                <span class="badge badge-info"><%= item.product.state %></span>
+                <span class="badge badge-info">Cantidad: <%= item.product.quantity %></span>
+              </div>
+            </div>
+            <br>
+          <% elsif item.service != nil %>
+            <div class="row">
+              <div class="col-md-6">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                  </ol>
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <%= image_tag item.service.service_pictures.order(:number).first.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.service.service_pictures.order(:number).second.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.service.service_pictures.order(:number).third.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.service.service_pictures.order(:number).fourth.picture, class: "d-block w-100" %>
+                    </div>
+                    <div class="carousel-item">
+                      <%= image_tag item.service.service_pictures.order(:number).fifth.picture, class: "d-block w-100" %>
+                    </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Siguiente</span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h3><%= item.name %></h3>
+                <p><%= item.service.description %></p>
+              </div>
+            </div>
+            <br>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="color: black;">
+  <div class="col-md-12">
+    <div class="card bg-light mb-3">
+      <div class="card-header">
+        Quiero:
+      </div>
+      <div class="body text-center">
+        <br>
+        <div class="row align-items-center h-100">
+          <% i = 0 %>
+          <% @post.post_items.where(wants: true).each do |item| %>
+            <% i = i + 1 %>
+            <% if i > 1 %>
+              <span class="badge badge-primary">+</span>
+            <% end %>
+            <div class="col-sm-3">
+              <div class="card border-primary mb-3" style="max-width: 15rem;">
+                <div class="card-header">
+                  <%= item.name %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% @post.post_categories.where(wants: true).each do |category| %>
+            <% i = i + 1 %>
+            <% if i > 1 %>
+              <span class="badge badge-primary">+</span>
+            <% end %>
+            <div class="col-md-3">
+              <div class="card border-primary mb-3" style="max-width: 15rem;">
+                <div class="card-header">
+                  <% if category.category_product != nil %>
+                    <%= category.category_product.name %>
+                  <% elsif category.category_service != nil %>
+                    <%= category.category_service.name %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <p>
-  <strong>Description:</strong>
   <%= @post.description %>
 </p>
 
 <p>
-  <strong>Location:</strong>
+  <strong>Ubicación:</strong>
   <%= @post.location %>
 </p>
 
 <p>
-  <strong>User:</strong>
-  <%= @post.user %>
+  <strong>Creado por:</strong>
+  <%= link_to @post.user.name, user_path(@post.user) %>
 </p>
 
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
+<%= link_to 'Edit', edit_post_path(@post) %>
+
+<h3>Ingresar un nuevo comentario</h3>
+
+<%= form_with model: [@post, Comment.new] do |f| %>
+  <div class="form-group">
+    <%= f.text_field :content, class: "form-control", placeholder: "Ingrese su comentario" %>
+  </div>
+  <%= f.submit "Enviar comentario", class: "btn btn-primary" %>
+<% end %>
+
+<h3>Comentarios:</h3>
+
+<% @comments.each do |comment| %>
+
+<% end %>
+
+<div class="row align-items-center text-center h-100" id="comment<%= comment.id %>">
+  <p><%= comment.content %></p>
+  <% i = 0 %>
+  <% comment.comment_items.where(wants: false).each do |item| %>
+    <% i = i + 1 %>
+    <% if i > 1 %>
+      <span class="badge badge-primary">+</span>
+    <% end %>
+    <div class="col-sm-3">
+      <div class="card border-primary mb-3" style="max-width: 15rem;">
+        <div class="card-header">
+          <%= item.name %>
+        </div>
+        <div class="body text-center">
+          <%= image_tag item.picture, width: '90%', style: "display: inline-block;" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <span class="badge badge-primary">por</span>
+  <% i = 0 %>
+  <% comment.comment_items.where(wants: true).each do |item| %>
+    <% i = i + 1 %>
+    <% if i > 1 %>
+      <span class="badge badge-primary">+</span>
+    <% end %>
+    <div class="col-sm-3">
+      <div class="card border-primary mb-3" style="max-width: 15rem;">
+        <div class="card-header">
+          <%= item.name %>
+        </div>
+        <div class="body text-center">
+          <%= image_tag item.picture, width: '90%', style: "display: inline-block;" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

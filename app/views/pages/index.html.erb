@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="jumbotron">
       <h1>¡Te lo cambio!</h1>
-      <p>Bienvenido a TeLoCambio.cl, tu punto de búsqueda para aquellas cosas sin hogar que tengas por ahi y para encontrar aquello que siempre quisiste.</p>
+      <p>Bienvenido a TeLoCambio.cl, tu punto de búsqueda para aquellas cosas sin hogar que tengas por ahí y para encontrar aquello que siempre quisiste.</p>
     </div>
   </div>
 </div>
@@ -18,27 +18,84 @@
           <div class="col-md-12">
             <div class="card bg-light mb-3">
               <div class="card-header">
-                <%= post.name %>
+                <%= link_to post.name, post_path(post) %>
               </div>
               <div class="body">
                 <p class="card-text"><%= post.description %></p>
-                <p class="card-text"><%= post.location %></p>
-                <div class="row">
-                  <% post.items.post_items.where(wants: false).each do |item| %>
-                    <div class="col-md-3">
-                      <div class="card border-primary mb-3">
+                <p class="card-text">Ubicación: <%= post.location %></p>
+                <div class="row align-items-center text-center h-100">
+                  <% i = 0 %>
+                  <% post.post_items.where(wants: false).each do |item| %>
+                    <% i = i + 1 %>
+                    <% if i > 1 %>
+                      <span class="badge badge-primary">+</span>
+                    <% end %>
+                    <div class="col-sm-3">
+                      <div class="card border-primary mb-3" style="max-width: 15rem;">
                         <div class="card-header">
+                          <%= item.name %>
+                        </div>
+                        <div class="body text-center">
                           <% if item.service != nil %>
-                            <%= item.service.name %>
-                          <% elif item.product != nil %>
-                            <%= item.product.name %>
+                            <%= image_tag item.service.service_pictures.first.picture, width: '90%', style: "display: inline-block;" %>
+                          <% elsif item.product != nil %>
+                            <%= image_tag item.product.product_pictures.first.picture, width: '90%', style: "display: inline-block;" %>
                           <% end %>
                         </div>
-                        <div class="body">
+                      </div>
+                    </div>
+                  <% end %>
+                  <% post.post_categories.where(wants: false).each do |category| %>
+                    <% i = i + 1 %>
+                    <% if i > 1 %>
+                      <span class="badge badge-primary">+</span>
+                    <% end %>
+                    <div class="col-md-3">
+                      <div class="card border-primary mb-3" style="max-width: 15rem;">
+                        <div class="card-header">
+                          <% if category.category_product != nil %>
+                            <%= category.category_product.name %>
+                          <% elsif category.category_service != nil %>
+                            <%= category.category_service.name %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                  <span class="badge badge-primary">por</span>
+                  <% i = 0 %>
+                  <% post.post_items.where(wants: true).each do |item| %>
+                    <% i = i + 1 %>
+                    <% if i > 1 %>
+                      <span class="badge badge-primary">+</span>
+                    <% end %>
+                    <div class="col-sm-3">
+                      <div class="card border-primary mb-3" style="max-width: 15rem;">
+                        <div class="card-header">
+                          <%= item.name %>
+                        </div>
+                        <div class="body text-center">
                           <% if item.service != nil %>
-                            <%= item.service.name %>
-                          <% elif item.product != nil %>
-                            <%= item.product.name %>
+                            <%= image_tag item.service.service_pictures.first.picture, width: '100%' %>
+                          <% elsif item.product != nil %>
+                            <%= image_tag item.product.product_pictures.first.picture, width: '100%' %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                  <% post.post_categories.where(wants: true).each do |category| %>
+                    <% i = i + 1 %>
+                    <% if i > 1 %>
+                      <span class="badge badge-primary">+</span>
+                    <% end %>
+                    <div class="col-md-3">
+                      <div class="card border-primary mb-3" style="max-width: 15rem;">
+                        <div class="card-header">
+                          <% if category.category_product != nil %>
+                            <%= category.category_product.name %>
+                          <% elsif category.category_service != nil %>
+                            <%= category.category_service.name %>
                           <% end %>
                         </div>
                       </div>
